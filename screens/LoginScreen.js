@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
-import axios from 'axios';
+import { View, TextInput, Pressable, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen({ navigation }) {
@@ -10,7 +9,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,28 +26,75 @@ export default function LoginScreen({ navigation }) {
       await AsyncStorage.setItem('token', data.token);
       navigation.navigate('Home');
     } catch (err) {
-      setError('Credenciales XX invalidas');
-      console.log(err);
+      setError('Credenciales invalidas');
     }
   };
 
   return (
-    <View style={{ padding: 16 }}>
-      <TextInput
-        placeholder="Usuario"
-        value={username}
-        onChangeText={setUsername}
-        style={{ marginBottom: 8, borderBottomWidth: 1, borderBottomColor: '#ccc' }}
-      />
-      <TextInput
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={{ marginBottom: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}
-      />
-      <Button title="Ingresar" onPress={handleLogin} />
-      {error ? <Text style={{ color: 'red', marginTop: 16 }}>{error}</Text> : null}
+    <View style={styles.container}>
+      <View style={styles.box}>
+        <Text style={styles.titleMain}>Iniciar Sesión</Text>
+        <TextInput
+          placeholder="Usuario"
+          value={username}
+          onChangeText={setUsername}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.inputPassword}
+        />
+        <Pressable onPress={handleLogin}>
+          <Text style={styles.button}>Iniciar Sesión</Text>
+        </Pressable>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
+  box: {
+    marginLeft: 50,
+    marginRight: 50,
+    width: 200,
+    padding: 16,
+  },
+  titleMain: {
+    fontSize: 24,
+    marginBottom: 16,
+    color: '#1a98ff',
+    textAlign: 'center',
+  },
+  input: {
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  inputPassword: {
+    marginBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  button: {
+    color: 'white',
+    padding: 10,
+    backgroundColor: '#1a98ff',
+    textAlign: 'center',
+    fontSize: 16,
+    borderRadius: 10,
+  },
+  errorText: {
+    color: '#bb0000',
+    marginTop: 16,
+  },
+});
