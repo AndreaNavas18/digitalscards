@@ -39,6 +39,7 @@ export default function LoginScreen({ navigation }) {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
+          placeholderTextColor="#b2b2b2"
         />
         <TextInput
           placeholder="Contraseña"
@@ -46,6 +47,7 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setPassword}
           secureTextEntry
           style={styles.inputPassword}
+          placeholderTextColor="#b2b2b2"
         />
         <Pressable onPress={handleLogin}>
           <Text style={styles.button}>Iniciar Sesión</Text>
